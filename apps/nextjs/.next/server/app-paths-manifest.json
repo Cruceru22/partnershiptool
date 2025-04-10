@@ -1,0 +1,8 @@
+{
+  "/(homepage)/page": "app/(homepage)/page.js",
+  "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
+  "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js",
+  "/(auth)/signup/page": "app/(auth)/signup/page.js",
+  "/(dashboard)/[workspace]/page": "app/(dashboard)/[workspace]/page.js",
+  "/(dashboard)/[workspace]/members/page": "app/(dashboard)/[workspace]/members/page.js"
+}

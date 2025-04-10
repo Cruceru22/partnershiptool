@@ -1,0 +1,114 @@
+/* [project]/apps/nextjs/src/app/prosemirror.css [app-client] (css) */
+.ProseMirror a {
+  color: hsl(var(--muted-foreground));
+}
+
+.ProseMirror a:hover {
+  color: hsl(var(--foreground));
+}
+
+.ProseMirror p.is-empty:last-child:before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--text-placeholder));
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror img {
+  transition: opacity .1s ease-in-out !important;
+}
+
+.ProseMirror img:hover {
+  cursor: pointer;
+  filter: brightness(90%);
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid #5abbf7;
+  filter: brightness(90%);
+  opacity: .5;
+}
+
+.img-placeholder {
+  position: relative;
+}
+
+.img-placeholder:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3.5px solid #fff;
+  border-top-color: #bcbcbc;
+  animation: .4s linear infinite spinning;
+}
+
+@keyframes spinning {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+ul[data-type="taskList"] li > label {
+  margin-right: .2rem;
+  user-select: none;
+}
+
+@media screen and (width <= 768px) {
+  ul[data-type="taskList"] li > label {
+    margin-right: .2rem;
+  }
+}
+
+ul[data-type="taskList"] li > label {
+  user-select: none;
+  color: hsl(var(--foreground));
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: hsl(var(--background));
+  margin: 0;
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+  position: relative;
+  top: 4px;
+  border: 1.5px solid hsl(var(--text-placeholder));
+  display: grid;
+  place-content: center;
+  border-radius: 4px;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]:before {
+  content: "";
+  width: .65em;
+  height: .65em;
+  transform: scale(0);
+  transition: transform .12s ease-in-out;
+  box-shadow: inset 1em 1em;
+  transform-origin: center;
+  clip-path: polygon(14% 52%, 2% 65%, 48% 95%, 100% 20%, 87% 10%, 43% 72%);
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"]:checked:before {
+  transform: scale(1);
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+ul[data-type="taskList"] li > div > p {
+  color: hsl(var(--foreground));
+}
+
+/*# sourceMappingURL=apps_nextjs_src_app_prosemirror_b52d8e88.css.map*/
