@@ -2,6 +2,9 @@
 node_modules/
 .pnpm-store/
 
+# Testing
+coverage/
+
 # Next.js
 .next/
 out/
@@ -28,4 +31,18 @@ yarn-error.log*
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Misc
+.DS_Store
+*.pem
+
+# Vercel
+.vercel
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Turbo
+.turbo/ 
