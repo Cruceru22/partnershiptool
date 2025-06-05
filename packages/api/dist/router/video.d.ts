@@ -4,20 +4,12 @@ export declare const videoRouter: {
             title: string;
         };
         output: {
-            id: string;
+            id: any;
         }[];
     }>;
     all: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
-        output: {
-            url: string | null;
-            id: string;
-            title: string;
-            description: string | null;
-            organizationId: string;
-            createdAt: Date;
-            updatedAt: Date | null;
-        }[];
+        output: any;
     }>;
     delete: import("@trpc/server").TRPCMutationProcedure<{
         input: string;
@@ -29,20 +21,12 @@ export declare const videoRouter: {
             title: string;
         };
         output: {
-            id: string;
+            id: any;
         }[];
     }>;
     byId: import("@trpc/server").TRPCQueryProcedure<{
         input: string;
-        output: {
-            url: string | null;
-            id: string;
-            title: string;
-            description: string | null;
-            organizationId: string;
-            createdAt: Date;
-            updatedAt: Date | null;
-        } | undefined;
+        output: any;
     }>;
     thumbnailCheck: import("@trpc/server").TRPCMutationProcedure<{
         input: string;

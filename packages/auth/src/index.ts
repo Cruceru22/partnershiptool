@@ -7,4 +7,5 @@ export const getSession = async () =>
     headers: await headers(),
   });
 
-export * from "./auth";
+export { auth, type Session } from "./auth";
+export { encrypt, decrypt } from "./encryption";

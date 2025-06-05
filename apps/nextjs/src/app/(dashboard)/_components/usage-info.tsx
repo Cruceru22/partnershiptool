@@ -44,7 +44,6 @@ export default function UsageInfo() {
   const params = useParams();
 
   const trpc = useTRPC();
-  const { data: limits } = useQuery(trpc.limits.get.queryOptions());
 
   const plan = useOrganizationPlan();
 
@@ -52,33 +51,11 @@ export default function UsageInfo() {
 
   return (
     <div className="flex flex-col gap-2 rounded-md border p-4">
-      <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          <p className="text-sm font-semibold text-foreground">Usage</p>
           <Badge variant="outline">Free</Badge>
         </div>
-        <UsageItem
-          label="Storage used"
-          value={limits?.uploadLimit ?? 0}
-          max={getUploadSizeLimit(plan)}
-          suffix="MB"
-        />
-        <UsageItem
-          label="Uploads used"
-          value={limits?.importLimit ?? 0}
-          max={getImportLimit(plan)}
-        />
-      </div>
-
-      <p className="text-xs text-muted-foreground">
-        Usage will reset Apr 8, 2025
-      </p>
-
-      <Link href={`/${params.workspace as string}/upgrade`}>
-        <Button variant="primary" className="w-full">
-          Get Pro Version
-        </Button>
-      </Link>
     </div>
+
+     
   );
 }

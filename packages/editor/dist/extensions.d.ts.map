@@ -1,1 +1,1 @@
-{"version":3,"file":"extensions.d.ts","sourceRoot":"","sources":["../src/extensions.tsx"],"names":[],"mappings":"AAmHA,eAAO,MAAM,iBAAiB,iPAiB7B,CAAC"}
+{"version":3,"file":"extensions.d.ts","sourceRoot":"","sources":["../src/extensions.tsx"],"names":[],"mappings":"AAmBA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,cAAc,CAAC;AAyGjD,eAAO,MAAM,iBAAiB,EAAE,YAAY,EAkB3C,CAAC"}

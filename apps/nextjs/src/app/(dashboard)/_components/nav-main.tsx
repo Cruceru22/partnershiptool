@@ -3,7 +3,7 @@
 import type { LucideIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
-import { UsersIcon, VideoIcon } from "lucide-react";
+import { UsersIcon, HomeIcon, FileIcon, UserCheck } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -18,14 +18,24 @@ import { WorkspaceLink } from "~/components/workspace-link";
 
 const items = [
   {
-    title: "Videos",
-    icon: VideoIcon,
+    title: "Dashboard",
+    icon: HomeIcon,
     isRootPath: true,
   },
   {
     title: "Members",
     href: "/members",
     icon: UsersIcon,
+  },
+  {
+    title: "Affiliates",
+    href: "/affiliates",
+    icon: UserCheck,
+  },
+  {
+    title: "Weekly AI Report",
+    href: "/weekly-ai-report",
+    icon: FileIcon,
   },
 ] as { title: string; icon: LucideIcon; href?: string }[];
 

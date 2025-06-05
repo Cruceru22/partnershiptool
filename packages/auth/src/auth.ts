@@ -10,6 +10,7 @@ import { Resend } from "resend";
 import Stripe from "stripe";
 
 import { db } from "@acme/db/client";
+import { eq, and, gt, sql } from "@acme/db";
 
 import { env } from "../env";
 
@@ -217,22 +218,76 @@ export const config = {
           };
         },
       },
-    },
-    user: {
-      create: {
-        after: async (user) => {
-          const userName = user.name;
+      update: {
+        before: async (session, context) => {
+          // Ensure required session fields are present
+          if (!session.id || !session.userId || !session.expiresAt || !session.token) {
+            return false;
+          }
 
-          const slug = slugify(userName, {
-            lowercase: true,
-          });
-          await auth.api.createOrganization({
-            body: {
-              userId: user.id,
-              name: `${userName}'s team`,
-              slug: `${slug}-${nanoid()}`,
+          if (!context || typeof context !== 'object') {
+            return {
+              data: {
+                id: session.id,
+                userId: session.userId,
+                expiresAt: session.expiresAt,
+                token: session.token,
+                createdAt: session.createdAt || new Date(),
+                updatedAt: new Date(),
+                ipAddress: session.ipAddress || null,
+                userAgent: session.userAgent || null,
+                activeOrganizationId: null,
+              },
+            };
+          }
+
+          const updateData = context as { data?: { activeOrganizationId?: string } };
+          const newOrgId = updateData?.data?.activeOrganizationId;
+          
+          // If activeOrganizationId is being updated, verify the user is a member
+          if (newOrgId) {
+            const member = await db.query.member.findFirst({
+              where: (org, { eq, and }) =>
+                and(
+                  eq(org.userId, sql`${session.userId}`),
+                  eq(org.organizationId, sql`${newOrgId}`),
+                ),
+            });
+
+            if (!member) {
+              throw new Error("User is not a member of this organization");
+            }
+
+            // Return the session with the new activeOrganizationId
+            return {
+              data: {
+                id: session.id,
+                userId: session.userId,
+                expiresAt: session.expiresAt,
+                token: session.token,
+                createdAt: session.createdAt || new Date(),
+                updatedAt: new Date(),
+                ipAddress: session.ipAddress || null,
+                userAgent: session.userAgent || null,
+                activeOrganizationId: newOrgId,
+              },
+            };
+          }
+
+          // If no activeOrganizationId update, return the original session
+          return {
+            data: {
+              id: session.id,
+              userId: session.userId,
+              expiresAt: session.expiresAt,
+              token: session.token,
+              createdAt: session.createdAt || new Date(),
+              updatedAt: new Date(),
+              ipAddress: session.ipAddress || null,
+              userAgent: session.userAgent || null,
+              activeOrganizationId: null,
             },
-          });
+          };
         },
       },
     },

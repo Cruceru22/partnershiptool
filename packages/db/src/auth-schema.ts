@@ -65,6 +65,15 @@ export const organization = pgTable("organization", {
   logo: text("logo"),
   createdAt: timestamp("created_at").notNull(),
   metadata: text("metadata"),
+  shareASaleToken: text("share_a_sale_token"),
+  shareASaleSecretKey: text("share_a_sale_secret_key"),
+  awinKey: text("awin_key"),
+  impactKey: text("impact_key"),
+  everflowKey: text("everflow_key"),
+  cjKey: text("cj_key"),
+  rakutenKey: text("rakuten_key"),
+  rakutenSecret: text("rakuten_secret"),
+  partnerizeKey: text("partnerize_key"),
 });
 
 export const member = pgTable("member", {
@@ -105,3 +114,5 @@ export const subscription = pgTable("subscription", {
   cancelAtPeriodEnd: boolean("cancel_at_period_end"),
   seats: integer("seats"),
 });
+
+

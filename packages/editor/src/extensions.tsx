@@ -17,6 +17,7 @@ import {
   Youtube,
 } from "novel";
 import { Markdown } from "tiptap-markdown";
+import type { AnyExtension } from "@tiptap/core";
 
 import {
   editorBlockquoteTw,
@@ -121,7 +122,7 @@ const DisableEnter = Extension.create({
     };
   },
 });
-export const defaultExtensions = [
+export const defaultExtensions: AnyExtension[] = [
   starterKit,
   placeholder,
   tiptapLink,

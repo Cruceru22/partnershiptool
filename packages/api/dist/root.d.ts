@@ -74,216 +74,111 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
             output: string;
         }>;
     };
-    aws: {
-        initiateMultipartUpload: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                videoId: string;
-                parts: number;
-                contentLength: number;
-                fileExtension: string;
-            };
-            output: {
-                uploadId: string;
-                signedUrls: {
-                    url: string;
-                    partNumber: number;
-                }[];
-            };
-        }>;
-        completeMultipartUpload: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                videoId: string;
-                parts: {
-                    PartNumber: number;
-                    ETag: string;
-                }[];
-                fileExtension: string;
-                uploadId: string;
-            };
-            output: {
-                success: boolean;
-                videoUrl: string;
-            };
-        }>;
-    };
-    video: {
-        create: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                title: string;
-            };
-            output: {
-                id: string;
-            }[];
-        }>;
-        all: import("@trpc/server").TRPCQueryProcedure<{
+    blog: {
+        getAll: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
                 id: string;
                 title: string;
-                description: string | null;
-                url: string | null;
-                organizationId: string;
                 createdAt: Date;
-                updatedAt: Date | null;
+                updatedAt: Date;
+                content: string;
+                images: string[] | null;
+                authorId: string;
+                published: boolean;
+                author: {
+                    id: string;
+                    name: string;
+                    image: string | null;
+                };
             }[];
         }>;
-        delete: import("@trpc/server").TRPCMutationProcedure<{
-            input: string;
-            output: import("pg").QueryResult<never>;
-        }>;
-        rename: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
+        debug: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
                 id: string;
                 title: string;
+                createdAt: Date;
+                updatedAt: Date;
+                content: string;
+                images: string[] | null;
+                authorId: string;
+                published: boolean;
+                author: {
+                    id: string;
+                    name: string;
+                    image: string | null;
+                };
+            }[];
+        }>;
+        getAllForNick: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                id: string;
+                title: string;
+                createdAt: Date;
+                updatedAt: Date;
+                content: string;
+                images: string[] | null;
+                authorId: string;
+                published: boolean;
+                author: {
+                    id: string;
+                    name: string;
+                    image: string | null;
+                };
+            }[];
+        }>;
+        create: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                title: string;
+                content: string;
+                images?: string[] | undefined;
+                published?: boolean | undefined;
             };
             output: {
                 id: string;
-            }[];
-        }>;
-        byId: import("@trpc/server").TRPCQueryProcedure<{
-            input: string;
-            output: {
-                id: string;
                 title: string;
-                description: string | null;
-                url: string | null;
-                organizationId: string;
                 createdAt: Date;
-                updatedAt: Date | null;
+                updatedAt: Date;
+                content: string;
+                images: string[] | null;
+                authorId: string;
+                published: boolean;
             } | undefined;
         }>;
-        thumbnailCheck: import("@trpc/server").TRPCMutationProcedure<{
-            input: string;
-            output: {
-                success: boolean;
-                key: string;
-                response: {};
-            };
-        }>;
-    };
-    comment: {
-        byVideoId: import("@trpc/server").TRPCQueryProcedure<{
+        update: import("@trpc/server").TRPCMutationProcedure<{
             input: {
-                videoId: string;
-                reviewerId: string | null;
+                id: string;
+                title?: string | undefined;
+                content?: string | undefined;
+                images?: string[] | undefined;
+                published?: boolean | undefined;
             };
             output: {
                 id: string;
-                createdAt: Date;
-                updatedAt: Date | null;
-                metadata: unknown;
-                content: string | null;
-                startTime: number | null;
-                endTime: number | null;
-                attachments: unknown;
-                videoId: string;
-                reviewerId: string | null;
-                reviewer: {
-                    id: string;
-                    userId: string | null;
-                    videoId: string;
-                    anonUserId: string | null;
-                    user: {
-                        email: string;
-                        id: string;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        name: string;
-                        stripeCustomerId: string | null;
-                        emailVerified: boolean;
-                        image: string | null;
-                    } | null;
-                } | null;
-            }[];
-        }>;
-        create: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                id: string;
+                title: string;
                 content: string;
-                startTime: number;
-                videoId: string;
-                endTime?: number | undefined;
-            };
-            output: {
-                id: string;
-            }[];
+                images: string[] | null;
+                authorId: string;
+                createdAt: Date;
+                updatedAt: Date;
+                published: boolean;
+            } | undefined;
         }>;
         delete: import("@trpc/server").TRPCMutationProcedure<{
-            input: string;
-            output: import("pg").QueryResult<never>;
+            input: {
+                id: string;
+            };
+            output: {
+                success: boolean;
+            };
         }>;
-    };
-    limits: import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
-        ctx: {
-            session: {
-                session: {
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: string;
-                    expiresAt: Date;
-                    token: string;
-                    ipAddress?: string | null | undefined | undefined;
-                    userAgent?: string | null | undefined | undefined;
-                    activeOrganizationId?: string | null | undefined;
-                };
-                user: {
-                    id: string;
-                    name: string;
-                    email: string;
-                    emailVerified: boolean;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    image?: string | null | undefined | undefined;
-                    stripeCustomerId?: string | null | undefined;
-                };
-            } | null;
-            db: import("drizzle-orm/node-postgres").NodePgDatabase<typeof import("@acme/db/schema")> & {
-                $client: import("drizzle-orm/node-postgres").NodePgClient;
-            };
-            ip: string;
-        };
-        meta: object;
-        errorShape: {
-            data: {
-                zodError: import("zod").typeToFlattenedError<any, string> | null;
-                code: import("@trpc/server/unstable-core-do-not-import").TRPC_ERROR_CODE_KEY;
-                httpStatus: number;
-                path?: string;
-                stack?: string;
-            };
-            message: string;
-            code: import("@trpc/server/unstable-core-do-not-import").TRPC_ERROR_CODE_NUMBER;
-        };
-        transformer: true;
-    }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
-        get: import("@trpc/server").TRPCQueryProcedure<{
+        isNick: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
-                uploadLimit: number;
-                importLimit: number;
+                isNick: boolean;
             };
-        }>;
-    }>>;
-    reviewer: {
-        byVideoId: import("@trpc/server").TRPCQueryProcedure<{
-            input: string;
-            output: {
-                id: string;
-                userId: string | null;
-                videoId: string;
-                anonUserId: string | null;
-                user: {
-                    email: string;
-                    id: string;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    name: string;
-                    stripeCustomerId: string | null;
-                    emailVerified: boolean;
-                    image: string | null;
-                } | null;
-            }[];
         }>;
     };
     organization: {

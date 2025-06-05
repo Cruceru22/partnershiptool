@@ -2,7 +2,7 @@
 
 import type { FormEvent} from "react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { authClient } from "@acme/auth/client";
 import { Button } from "@acme/ui/button";
@@ -12,11 +12,21 @@ import { Label } from "@acme/ui/label";
 
 import { cn } from "~/lib/utils";
 
+interface LoginFormProps extends React.ComponentProps<"div"> {
+  redirectUrl?: string;
+}
+
 export function LoginForm({
   className,
+  redirectUrl,
   ...props
-}: React.ComponentProps<"div">) {
+}: LoginFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Use the passed redirectUrl or check URL params as fallback
+  const finalRedirectUrl = redirectUrl || searchParams.get('redirect') || '/';
+  
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -115,8 +125,9 @@ export function LoginForm({
 
       // Only proceed if verification was successful
       if (success) {
-        // Redirect to the homepage after successful login
-        router.push("/");
+        console.log("Login successful, redirecting to:", finalRedirectUrl);
+        // Redirect to the specified URL after successful login
+        router.push(finalRedirectUrl);
         router.refresh();
       } else {
         // This should not happen, but just in case
@@ -143,7 +154,7 @@ export function LoginForm({
 
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/login",
+        callbackURL: finalRedirectUrl,
       });
     } catch (err) {
       console.error(err);
@@ -214,7 +225,7 @@ export function LoginForm({
 
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <a href="/signup" className="underline underline-offset-4">
+                  <a href={`/signup?redirect=${encodeURIComponent(finalRedirectUrl)}`} className="underline underline-offset-4">
                     Sign up
                   </a>
                 </div>

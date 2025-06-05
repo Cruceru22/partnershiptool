@@ -4,6 +4,7 @@ import { Raleway } from "next/font/google";
 import { cn } from "@acme/ui";
 import { ThemeProvider } from "@acme/ui/theme";
 import { Toaster } from "@acme/ui/toast";
+import { Toaster as SonnerToaster } from "sonner";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -67,6 +68,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>{props.children}</TRPCReactProvider>
           <Toaster />
+          <SonnerToaster position="top-center" />
         </ThemeProvider>
       </body>
     </html>

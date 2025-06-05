@@ -76,9 +76,10 @@ export const LandingNavbar = () => {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold tracking-tight">
-              Comment.video
+              Partnership tool
             </span>
           </Link>
+          <Link href="/blog">Blog</Link>
         </div>
 
         <div className="flex items-center gap-4">

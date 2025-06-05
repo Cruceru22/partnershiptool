@@ -35,40 +35,42 @@ export const LandingFeatures = () => {
   return (
     <section className="flex flex-col gap-12 pt-20">
       <div className="flex flex-col items-center justify-center gap-2">
-        <h2 className="max-w-md text-balance text-center text-3xl font-semibold tracking-tight">
-          literally only built to make video feedback easier
+        <h2 className="max-w-lg text-balance text-center text-3xl font-semibold tracking-tight">
+          All your affiliate tools in one place
         </h2>
         <p className="max-w-md text-center text-lg text-muted-foreground">
-          so nothing like ai stuff, or anything hard to use, make it simple as
+          compare all your affiliate tools in one place
+          <br />
+          get reports weekly about your performance
           possible, and just let people do their thing
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div className="flex flex-col gap-8 divide-neutral-200 sm:divide-x">
           <LandingFeature
-            image="/landing/features/comments.png"
-            title="comment at timestamps"
-            description="make comments at specific timestamps, and they'll be synced to the video"
+            image="https://via.placeholder.com/300"
+            title="compare tools"
+            description="compare all your affiliate tools in one place"
           />
           <LandingFeature
-            image="/landing/features/share.png"
-            title="share with anyone"
-            description="get a link to the video, and share it with anyone you like, for real, no bullshit"
+            image="https://via.placeholder.com/300"
+            title="get reports"
+            description="get reports weekly about your performance"
           />
         </div>
 
         <div className="flex flex-col gap-8 divide-neutral-200 sm:divide-x [&>*]:border-t [&>*]:border-neutral-200">
           <LandingFeature
-            image="/landing/features/dashboard.png"
-            title="all your videos in one place"
-            description="you can just store the videos here, like we don't ask more, do as you wish could be cheaper"
+            image="https://via.placeholder.com/300"
+            title="all your tools in one place"
+            description="you can just store the tools here, like we don't ask more, do as you wish could be cheaper"
           />
           <LandingFeature
-            image="/landing/features/team.png"
+            image="https://via.placeholder.com/300"
             title="chill with your team"
-            description="you can have your people and check their videos, like from the same place, literally easy"
+            description="you can have your people and check the statistics, like from the same place, literally easy"
           />
-        </div>
+        </div>  
       </div>
     </section>
   );

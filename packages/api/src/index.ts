@@ -31,3 +31,6 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export { createTRPCContext, appRouter, createCaller };
 export type { AppRouter, RouterInputs, RouterOutputs };
+
+export { auth, getSession } from "@acme/auth";
+export type { Session } from "@acme/auth";

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/andreicruceru/comment.video/apps/nextjs/src/app/%28homepage%29/layout.tsx"],"sourcesContent":["import React from \"react\";\n\nexport default function HomePageLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}): React.ReactElement {\n  return (\n    <div className=\"bg-background\">\n      {children}\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;AAEe,SAAS,eAAe,EACrC,QAAQ,EAGT;IACC,qBACE,8OAAC;QAAI,WAAU;kBACZ;;;;;;AAGP","debugId":null}},
-    {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}

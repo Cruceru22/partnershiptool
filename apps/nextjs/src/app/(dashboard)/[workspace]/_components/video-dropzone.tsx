@@ -138,16 +138,9 @@ export function VideoDropzone({
             />
           </div>
           <div className="z-20 flex flex-col items-center justify-center">
-            <p className="text-lg font-medium">
-              {isDragActive
-                ? "drop the video here"
-                : "drag and drop a video file, or click to browse"}
-            </p>
-            <p className="text-md text-muted-foreground">
-              supports most video formats (MP4, MOV, AVI, etc.)
-            </p>
+            
             <Button variant="primary" className="mt-4">
-              add your video
+              add your company
             </Button>
           </div>
         </>

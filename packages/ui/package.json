@@ -35,7 +35,8 @@
     "./tabs": "./src/tabs.tsx",
     "./hooks": "./src/hooks/index.tsx",
     "./switch": "./src/switch.tsx",
-    "./select": "./src/select.tsx"
+    "./select": "./src/select.tsx",
+    "./month-selector": "./src/month-selector.tsx"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",

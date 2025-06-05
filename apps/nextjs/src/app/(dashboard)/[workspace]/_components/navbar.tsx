@@ -16,7 +16,7 @@ export default function Navbar() {
   return (
     <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-16 py-4">
       <Link href="/" className="text-xl font-bold hover:opacity-80">
-        comment.video
+        Partnership tool
       </Link>
 
       <NavigationMenu>
@@ -66,16 +66,6 @@ export default function Navbar() {
             <NavigationMenuContent>
               <div className="w-[200px] p-4">
                 <ul className="space-y-2">
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/resources/blog"
-                        className="block hover:text-primary"
-                      >
-                        Blog
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
                   <li>
                     <NavigationMenuLink asChild>
                       <Link
@@ -159,6 +149,17 @@ export default function Navbar() {
                 </ul>
               </div>
             </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none data-[active]:bg-accent data-[state=open]:bg-accent data-[active]:text-accent-foreground data-[state=open]:text-accent-foreground"
+            >
+              <Link href="/blog" className="hover:text-primary">
+                Blog
+              </Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
