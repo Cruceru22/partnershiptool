@@ -5,17 +5,17 @@
       "static/media/Geist_Variable-s.p.781b491f.woff2",
       "static/media/GeistMono_Variable.p.0ce97b8a.woff2"
     ],
-    "[project]/apps/nextjs/src/app/(auth)/login/page": [
-      "static/media/1Ptug8zYS_SKggPNyC0IT4ttDfA-s.p.a3111b96.woff2",
-      "static/media/Geist_Variable-s.p.781b491f.woff2",
-      "static/media/GeistMono_Variable.p.0ce97b8a.woff2"
-    ],
-    "[project]/apps/nextjs/src/app/(auth)/signup/page": [
-      "static/media/1Ptug8zYS_SKggPNyC0IT4ttDfA-s.p.a3111b96.woff2",
-      "static/media/Geist_Variable-s.p.781b491f.woff2",
-      "static/media/GeistMono_Variable.p.0ce97b8a.woff2"
-    ],
     "[project]/apps/nextjs/src/app/(dashboard)/[workspace]/page": [
+      "static/media/1Ptug8zYS_SKggPNyC0IT4ttDfA-s.p.a3111b96.woff2",
+      "static/media/Geist_Variable-s.p.781b491f.woff2",
+      "static/media/GeistMono_Variable.p.0ce97b8a.woff2"
+    ],
+    "[project]/apps/nextjs/src/app/(dashboard)/[workspace]/members/page": [
+      "static/media/1Ptug8zYS_SKggPNyC0IT4ttDfA-s.p.a3111b96.woff2",
+      "static/media/Geist_Variable-s.p.781b491f.woff2",
+      "static/media/GeistMono_Variable.p.0ce97b8a.woff2"
+    ],
+    "[project]/apps/nextjs/src/app/(dashboard)/[workspace]/affiliates/page": [
       "static/media/1Ptug8zYS_SKggPNyC0IT4ttDfA-s.p.a3111b96.woff2",
       "static/media/Geist_Variable-s.p.781b491f.woff2",
       "static/media/GeistMono_Variable.p.0ce97b8a.woff2"

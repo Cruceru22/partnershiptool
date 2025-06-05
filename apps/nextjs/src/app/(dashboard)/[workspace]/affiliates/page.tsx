@@ -210,8 +210,8 @@ export default function AffiliatesPage() {
               </TableCell>
             </TableRow>
           ) : (
-            filteredAffiliates.map((affiliate) => (
-              <TableRow key={affiliate.userId}>
+            filteredAffiliates.map((affiliate, index) => (
+              <TableRow key={`${affiliate.userId}-${affiliate.email}-${index}`}>
                 <TableCell className="font-medium">{affiliate.userId}</TableCell>
                 <TableCell>
                   <div className="flex flex-col">
