@@ -39,8 +39,6 @@ export const LandingMain = ({ userState }: LandingMainProps) => {
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-xl">
             compare all your affiliate tools in one place
-            <br />
-            get reports weekly about your performance
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
