@@ -41,8 +41,7 @@ export const LandingFeatures = () => {
         <p className="max-w-md text-center text-lg text-muted-foreground">
           compare all your affiliate tools in one place
           <br />
-          get reports weekly about your performance
-          possible, and just let people do their thing
+         and just let people do their thing
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
