@@ -93,6 +93,26 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 };
             }[];
         }>;
+        getById: import("@trpc/server").TRPCQueryProcedure<{
+            input: {
+                id: string;
+            };
+            output: {
+                id: string;
+                title: string;
+                createdAt: Date;
+                updatedAt: Date;
+                content: string;
+                images: string[] | null;
+                authorId: string;
+                published: boolean;
+                author: {
+                    id: string;
+                    name: string;
+                    image: string | null;
+                };
+            };
+        }>;
         debug: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {

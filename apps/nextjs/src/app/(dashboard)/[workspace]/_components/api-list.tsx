@@ -81,6 +81,11 @@ interface PlatformSummary {
   data: any[];
   status: "success" | "error" | "loading";
   error?: string;
+  comparison?: {
+    sales: { current: number; previous: number; growth: number };
+    commission: { current: number; previous: number; growth: number };
+    transactions: { current: number; previous: number; growth: number };
+  };
 }
 
 interface Filters {
@@ -93,6 +98,28 @@ interface Filters {
 
 type SortField = "saleAmount" | "commissionAmount" | null;
 type SortOrder = "asc" | "desc";
+
+// Growth indicator component
+const GrowthIndicator = ({ growth, value }: { growth?: number; value: string }) => {
+  if (growth === undefined) return <span>{value}</span>;
+  
+  const isPositive = growth > 0;
+  const isNeutral = growth === 0;
+  
+  return (
+    <div className="flex items-center gap-2">
+      <span>{value}</span>
+      <span className={`text-xs flex items-center gap-1 ${
+        isNeutral ? 'text-muted-foreground' : isPositive ? 'text-green-600' : 'text-red-600'
+      }`}>
+        {!isNeutral && (
+          <span>{isPositive ? '↗' : '↘'}</span>
+        )}
+        {Math.abs(growth).toFixed(1)}%
+      </span>
+    </div>
+  );
+};
 
 export const APIList = () => {
   const [platformData, setPlatformData] = useState<PlatformSummary[]>([
@@ -254,7 +281,7 @@ export const APIList = () => {
       try {
         setIsLoading(true);
         const [shareASaleRes, awinRes, impactRes, rakutenRes] = await Promise.all([
-          fetch("/api/affiliate/shareasale"),
+          fetch(`/api/affiliate/shareasale-transactions${selectedMonth ? `?month=${selectedMonth}` : ''}`),
           fetch(`/api/affiliate/awin${selectedMonth ? `?month=${selectedMonth}` : ''}`),
           fetch("/api/affiliate/impact"),
           fetch(`/api/affiliate/rakuten${selectedMonth ? `?month=${selectedMonth}` : ''}`),
@@ -267,20 +294,22 @@ export const APIList = () => {
           rakutenRes.json(),
         ]);
 
-        console.log('API responses:', { awinData, rakutenData });
+        console.log('API responses:', { shareASaleData, awinData, rakutenData });
 
         const newPlatformData: PlatformSummary[] = [
           {
             platform: "ShareASale",
-            data: Array.isArray(shareASaleData) ? shareASaleData : [],
+            data: shareASaleData.transactions || (Array.isArray(shareASaleData) ? shareASaleData : []),
             status: shareASaleRes.ok ? ("success" as const) : ("error" as const),
             error: shareASaleData.error,
+            comparison: shareASaleData.comparison || undefined,
           },
           {
             platform: "Awin",
             data: awinData.transactions || (Array.isArray(awinData) ? awinData : []),
             status: awinRes.ok ? ("success" as const) : ("error" as const),
             error: awinData.error,
+            comparison: awinData.comparison || undefined,
           },
           {
             platform: "Impact",
@@ -536,6 +565,14 @@ export const APIList = () => {
           >
             Edit API Keys
           </Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              window.location.href = window.location.pathname + '/compare';
+            }}
+          >
+            📊 Compare Months
+          </Button>
         <MonthSelector
           onSelect={setSelectedMonth}
           isLoading={isLoading}
@@ -550,6 +587,8 @@ export const APIList = () => {
         onClose={() => setIsEditModalOpen(false)}
         initialData={apiKeys}
       />
+
+      
 
       <Table>
         <TableHeader>
@@ -571,21 +610,30 @@ export const APIList = () => {
                   {platform.status === "loading" ? (
                     <div className="h-4 w-12 animate-pulse rounded bg-muted" />
                   ) : (
-                    `$${totals.sales.toFixed(2)}`
+                    <GrowthIndicator 
+                      value={`$${totals.sales.toFixed(2)}`}
+                      growth={platform.comparison?.sales.growth}
+                    />
                   )}
                 </TableCell>
                 <TableCell>
                   {platform.status === "loading" ? (
                     <div className="h-4 w-16 animate-pulse rounded bg-muted" />
                   ) : (
-                    `$${totals.commission.toFixed(2)}`
+                    <GrowthIndicator 
+                      value={`$${totals.commission.toFixed(2)}`}
+                      growth={platform.comparison?.commission.growth}
+                    />
                   )}
                 </TableCell>
                 <TableCell>
                   {platform.status === "loading" ? (
                     <div className="h-4 w-8 animate-pulse rounded bg-muted" />
                   ) : (
-                    totals.transactions
+                    <GrowthIndicator 
+                      value={totals.transactions.toString()}
+                      growth={platform.comparison?.transactions.growth}
+                    />
                   )}
                 </TableCell>
                 <TableCell>
@@ -603,39 +651,35 @@ export const APIList = () => {
         </TableBody>
       </Table>
 
-      {/* Awin Transactions Table */}
-      {(() => {
-        const awinPlatform = filteredData.find((p) => p.platform === "Awin");
-        const awinData = awinPlatform?.data ?? [];
+      {/* Transaction Tables for All Platforms */}
+      {filteredData.map((platform) => {
+        const platformData = platform.data ?? [];
 
-        console.log('Awin data for table:', awinData);
-        
         // If there's no data or the data is empty, don't show the table
-        if (!awinData || awinData.length === 0) {
-          console.log('No Awin data to display');
+        if (!platformData || platformData.length === 0) {
           return null;
         }
 
-        const sortedData = getSortedData(awinData);
+        const sortedData = getSortedData(platformData);
 
         return (
-          <div className="mt-4">
+          <div key={platform.platform} className="mt-8">
             <h3 className="mb-4 text-lg font-semibold">
-              Awin Transactions ({awinData.length})
+              {platform.platform} Transactions ({platformData.length})
             </h3>
 
             {/* Filters */}
             <div className="mb-6 grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 md:grid-cols-2 lg:grid-cols-5">
               <div className="flex flex-col">
                 <label
-                  htmlFor="site"
+                  htmlFor={`site-${platform.platform}`}
                   className="mb-1 text-sm font-medium text-foreground"
                 >
                   Site Name
                 </label>
                 <input
                   type="text"
-                  id="site"
+                  id={`site-${platform.platform}`}
                   name="site"
                   value={filters.site}
                   onChange={handleFilterChange}
@@ -646,14 +690,14 @@ export const APIList = () => {
 
               <div className="flex flex-col">
                 <label
-                  htmlFor="minCommission"
+                  htmlFor={`minCommission-${platform.platform}`}
                   className="mb-1 text-sm font-medium text-foreground"
                 >
                   Min Commission
                 </label>
                 <input
                   type="number"
-                  id="minCommission"
+                  id={`minCommission-${platform.platform}`}
                   name="minCommission"
                   value={filters.minCommission}
                   onChange={handleFilterChange}
@@ -664,14 +708,14 @@ export const APIList = () => {
 
               <div className="flex flex-col">
                 <label
-                  htmlFor="maxCommission"
+                  htmlFor={`maxCommission-${platform.platform}`}
                   className="mb-1 text-sm font-medium text-foreground"
                 >
                   Max Commission
                 </label>
                 <input
                   type="number"
-                  id="maxCommission"
+                  id={`maxCommission-${platform.platform}`}
                   name="maxCommission"
                   value={filters.maxCommission}
                   onChange={handleFilterChange}
@@ -682,14 +726,14 @@ export const APIList = () => {
 
               <div className="flex flex-col">
                 <label
-                  htmlFor="minSale"
+                  htmlFor={`minSale-${platform.platform}`}
                   className="mb-1 text-sm font-medium text-foreground"
                 >
                   Min Sale Amount
                 </label>
                 <input
                   type="number"
-                  id="minSale"
+                  id={`minSale-${platform.platform}`}
                   name="minSale"
                   value={filters.minSale}
                   onChange={handleFilterChange}
@@ -700,14 +744,14 @@ export const APIList = () => {
 
               <div className="flex flex-col">
                 <label
-                  htmlFor="maxSale"
+                  htmlFor={`maxSale-${platform.platform}`}
                   className="mb-1 text-sm font-medium text-foreground"
                 >
                   Max Sale Amount
                 </label>
                 <input
                   type="number"
-                  id="maxSale"
+                  id={`maxSale-${platform.platform}`}
                   name="maxSale"
                   value={filters.maxSale}
                   onChange={handleFilterChange}
@@ -747,57 +791,63 @@ export const APIList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sortedData.map((item: AwinTransaction) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.orderRef}</TableCell>
+                {sortedData.map((item: any) => (
+                  <TableRow key={item.id || item.transid || `${platform.platform}-${Math.random()}`}>
+                    <TableCell>{item.orderRef || item.ordernumber || 'N/A'}</TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span>{item.siteName}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {item.publisherUrl}
-                        </span>
+                        <span>{item.siteName || item.affiliatename || 'N/A'}</span>
+                        {item.publisherUrl && (
+                          <span className="text-xs text-muted-foreground">
+                            {item.publisherUrl}
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
                       <span
                         className={`inline-flex rounded-full px-2 text-xs ${
-                          item.commissionStatus === "approved"
+                          (item.commissionStatus === "approved" || item.status === "confirmed")
                             ? "bg-green-100 text-green-800"
-                            : item.commissionStatus === "pending"
+                            : (item.commissionStatus === "pending" || item.status === "pending")
                               ? "bg-yellow-100 text-yellow-800"
                               : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {item.commissionStatus}
+                        {item.commissionStatus || item.status || 'unknown'}
                       </span>
                     </TableCell>
                     <TableCell>
-                      {item.saleAmount?.currency || ''}{" "}
+                      {item.saleAmount?.currency || 'USD'}{" "}
                       {item.saleAmount?.amount ? item.saleAmount.amount.toFixed(2) : '0.00'}
                     </TableCell>
                     <TableCell>
-                      {item.commissionAmount?.currency || ''}{" "}
+                      {item.commissionAmount?.currency || 'USD'}{" "}
                       {item.commissionAmount?.amount ? item.commissionAmount.amount.toFixed(2) : '0.00'}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span>{item.type}</span>
-                        {item.voucherCodeUsed && (
+                        <span>{item.type || item.transactiontype || 'N/A'}</span>
+                        {(item.voucherCodeUsed || item.usedacoupon) && (
                           <span className="text-xs text-muted-foreground">
-                            Voucher: {item.voucherCode}
+                            Voucher: {item.voucherCode || item.couponccode || 'Yes'}
                           </span>
                         )}
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col text-sm">
-                        <span>{item.customerCountry}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {item.customerAcquisition}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {item.clickDevice} → {item.transactionDevice}
-                        </span>
+                        <span>{item.customerCountry || 'N/A'}</span>
+                        {item.customerAcquisition && (
+                          <span className="text-xs text-muted-foreground">
+                            {item.customerAcquisition}
+                          </span>
+                        )}
+                        {(item.clickDevice && item.transactionDevice) && (
+                          <span className="text-xs text-muted-foreground">
+                            {item.clickDevice} → {item.transactionDevice}
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -809,10 +859,12 @@ export const APIList = () => {
                           Trans:{" "}
                           {item.transactionDate ? new Date(item.transactionDate).toLocaleDateString() : 'N/A'}
                         </span>
-                        <span>
-                          Valid:{" "}
-                          {item.validationDate ? new Date(item.validationDate).toLocaleDateString() : 'N/A'}
-                        </span>
+                        {item.validationDate && (
+                          <span>
+                            Valid:{" "}
+                            {new Date(item.validationDate).toLocaleDateString()}
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -821,7 +873,7 @@ export const APIList = () => {
             </Table>
           </div>
         );
-      })()}
+      })}
     </div>
   );
 };

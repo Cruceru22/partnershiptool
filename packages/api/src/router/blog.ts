@@ -25,6 +25,47 @@ export const blogRouter = {
     return posts;
   }),
 
+  // Get a single blog post by ID (public)
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.db.query.blogPost.findFirst({
+        where: eq(blogPost.id, input.id),
+        with: {
+          author: {
+            columns: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
+
+      if (!post) {
+        throw new Error("Blog post not found");
+      }
+
+      // Only return published posts to public, unless user is Nick
+      if (!post.published) {
+        // Check if user is authenticated and is Nick
+        const user = ctx.session?.user;
+        if (user) {
+          const userAnalysisRecord = await ctx.db.query.userAnalysis.findFirst({
+            where: eq(userAnalysis.userId, user.id),
+          });
+          
+          if (!userAnalysisRecord?.isNick) {
+            throw new Error("Blog post not found");
+          }
+        } else {
+          throw new Error("Blog post not found");
+        }
+      }
+
+      return post;
+    }),
+
   // Debug endpoint to get all posts (remove this after testing)
   debug: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.db.query.blogPost.findMany({
